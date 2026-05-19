@@ -21,7 +21,15 @@ function setAuthCookie(res: Response, token: string) {
 }
 
 export async function signup(req: Request, res: Response) {
-  const { email, password } = credSchema.parse(req.body);
+  const parsed = credSchema.safeParse(req.body);
+
+if (!parsed.success) {
+  return res.status(400).json({
+    error: parsed.error.errors[0].message,
+  });
+}
+
+const { email, password } = parsed.data;
   const existing = await User.findOne({ email });
   if (existing) return res.status(409).json({ error: "Email already registered" });
   const passwordHash = await bcrypt.hash(password, 10);
@@ -32,7 +40,15 @@ export async function signup(req: Request, res: Response) {
 }
 
 export async function login(req: Request, res: Response) {
-  const { email, password } = credSchema.parse(req.body);
+  const parsed = credSchema.safeParse(req.body);
+
+if (!parsed.success) {
+  return res.status(400).json({
+    error: parsed.error.errors[0].message,
+  });
+}
+
+const { email, password } = parsed.data;
   const user = await User.findOne({ email });
   if (!user) return res.status(401).json({ error: "Invalid credentials" });
   const ok = await bcrypt.compare(password, user.passwordHash);

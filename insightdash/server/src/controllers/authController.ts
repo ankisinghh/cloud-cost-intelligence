@@ -14,8 +14,8 @@ const credSchema = z.object({
 function setAuthCookie(res: Response, token: string) {
   res.cookie(env.cookieName, token, {
     httpOnly: true,
-    sameSite: "lax",
-    secure: isProd,
+    sameSite: "none",
+    secure: true,
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 }
@@ -43,7 +43,11 @@ export async function login(req: Request, res: Response) {
 }
 
 export async function logout(_req: Request, res: Response) {
-  res.clearCookie(env.cookieName);
+  res.clearCookie(env.cookieName, {
+  httpOnly: true,
+  sameSite: "none",
+  secure: true,
+});
   res.json({ ok: true });
 }
 

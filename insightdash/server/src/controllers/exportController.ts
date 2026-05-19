@@ -9,7 +9,7 @@ import type { AuthedRequest } from "../middleware/auth";
 export async function exportCsv(req: AuthedRequest, res: Response) {
   const ds = await Dataset.findOne({ _id: req.params.id, userId: req.userId });
   if (!ds) return res.status(404).json({ error: "Not found" });
-  const buf = await fs.readFile(ds.storagePath);
+  const buf = await fs.readFile(ds.storagePath!);
   const parsed = JSON.parse(buf.toString("utf8")) as {
     columns: string[];
     rows: Record<string, unknown>[];

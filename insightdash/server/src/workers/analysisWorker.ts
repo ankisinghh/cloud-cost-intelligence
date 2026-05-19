@@ -11,7 +11,7 @@ export async function runAnalysis(datasetId: string): Promise<void> {
   ds.status = "processing";
   await ds.save();
   try {
-    const buf = await fs.readFile(path.resolve(ds.storagePath));
+    const buf = await fs.readFile(path.resolve(ds.storagePath!));
     const parsed = JSON.parse(buf.toString("utf8")) as {
       columns: string[];
       rows: Record<string, unknown>[];

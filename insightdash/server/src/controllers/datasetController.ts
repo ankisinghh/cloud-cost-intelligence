@@ -105,7 +105,10 @@ export async function getInsights(req: AuthedRequest, res: Response) {
         );
       }
 
-      summary = generateInsightSummary(parsed.rows, ins?.recommendations || []);
+      summary = generateInsightSummary(
+  parsed.rows,
+  (ins?.recommendations as any) || [],
+);
     } catch (e) {
       console.error("[insights-generation-error]", e);
     }
@@ -119,7 +122,7 @@ export async function getRows(req: AuthedRequest, res: Response) {
   if (!ds) return res.status(404).json({ error: "Not found" });
   const limit = Math.min(parseInt((req.query.limit as string) || "100", 10), 1000);
   const offset = Math.max(parseInt((req.query.offset as string) || "0", 10), 0);
-  const buf = await fs.readFile(ds.storagePath);
+  const buf = await fs.readFile(ds.storagePath!);
   const parsed = JSON.parse(buf.toString("utf8")) as {
     columns: string[];
     rows: Record<string, unknown>[];

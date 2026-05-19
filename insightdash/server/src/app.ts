@@ -14,7 +14,7 @@ export function createApp() {
     "http://localhost:5173",
     "http://localhost:5174",
     "http://localhost:5175",
-    "https://cloud-cost-intelligence.vercel.app/"
+    "https://cloud-cost-intelligence.vercel.app"
   ];
   app.use(
     cors({
